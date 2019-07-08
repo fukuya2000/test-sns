@@ -1,0 +1,175 @@
+.custom_app,
+.contents {
+  padding: 100px 10px 30px 10px;
+  width: 400px;
+  margin: 0 auto;
+}
+.contents h2{
+  text-align: center;
+}
+
+body p{
+  margin-bottom: 0 ;
+}
+a{
+  font-weight:500 ;
+  color: #333333;
+  text-decoration: none;
+  font-weight: 600;
+}
+.white_link{
+  font-size: 14px;
+  font-weight: 600;
+  color: white;
+}
+.far,
+.fal{
+  font-weight: 900;
+}
+/*---------------------
+        INDEX
+---------------------*/
+.custom_card{
+  width: 400px;
+  margin: 20px auto;
+
+}
+
+.textarea{
+  width: 100%;
+  margin: 10px 20px;
+  min-height: 100px;
+  border: 1px solid #333333;
+  padding: 5px 7px;
+  box-sizing: border-box;
+}
+.form .textarea{
+  margin: 0;
+}
+.card-wrap{
+  width: 400px;
+}
+.custom_card_title{
+  text-align: center;
+}
+
+form{
+  width: 90%;
+}
+.parent{
+  position: relative;
+}
+.delete{
+  font-weight: 600;
+  font-size: 25px;
+   color: #7e7e7e;
+   cursor: pointer;
+   position: absolute;
+   top: 0;
+   right: 4px;
+}
+.edit{
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  position: absolute;
+  top: 1;
+  right: 5px;
+}
+.edit a{
+  color: #11a4e9
+}
+
+.box_item{
+  box-shadow: 0 0 8px #7e7e7e;
+  margin: 10px 20px;
+  padding: 5px;
+
+}
+.box_item ul li{
+  list-style: none;
+  font-size: 16px;
+}
+.comment_edit{
+  position: absolute;
+  right: 0;
+  top:0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #7e7e7e;
+  cursor: pointer;
+}
+
+.like{
+  cursor: pointer;
+  color: #333333;
+}
+.unlike{
+  color: #eb2630;
+  cursor: pointer;
+}
+/*-----------------------
+       LOGIN
+-----------------------*/
+.select-form{
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
+.select-form__active{
+  border-bottom: 2px solid #1cb7ff;
+}
+
+.center{
+  text-align: center;
+}
+
+.tab__item{
+  cursor: pointer;
+}
+.form{
+  width: 100%;
+  margin: 20px 0;
+  position: relative;
+}
+input[type="text"],
+input[type="password"] {
+  padding: 7px 10px;
+  box-sizing: border-box;
+  width: 100%;
+  border: 1px solid #333333;
+  margin: 5px 0;
+  border-radius: 3px;
+}
+.btn{
+  color: white;
+  font-weight: 600;
+  padding: 5px 50px;
+  margin: 3px 0;
+  border-radius: 15px;
+  cursor: pointer;
+}
+.btn_position{
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+.left-btn_position{
+  position: absolute;
+  left: 15%;
+}
+.right-btn_position2{
+  position: absolute;
+  right: 15%;
+}
+.bg_btn1{
+  background: #1cb7ff;
+}
+.bg_btn2{
+  background: #ff5132;
+}
+.bg_btn3{
+  background: #eb2630;
+}
