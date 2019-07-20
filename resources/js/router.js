@@ -7,7 +7,10 @@ import Index from './post/Index.vue'
 import Create from './post/Create.vue'
 import SystemError from './post/errors/System.vue'
 import Post from './post/Post.vue'
-import { id } from 'postcss-selector-parser';
+import List from './post/FollowList.vue'
+import Torend from './post/Torend.vue'
+
+import Test from './components/Footer.vue'
 
 Vue.use(VueRouter)
 
@@ -38,7 +41,18 @@ const routes = [
   {
     path: '/posts/:id',
     component: Post,
-    
+  },
+  {
+    path: '/list',
+    component: List
+  },
+  {
+    path: '/trend',
+    component: Torend
+  },
+  {
+    path: '/test',
+    component: Test
   }
 ]
 

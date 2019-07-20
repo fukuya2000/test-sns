@@ -10,24 +10,26 @@ class LikeController extends Controller
 
     public function index($id)
     {
-
         $like =  new Like();
         $counter = count($like->where('post_id', $id)->get());
-        
-        $check = Like::where('user_id', \Auth::user()->id)->where('post_id', $id)->get();
-        $Ischeck = false;
-        if(!$check->isEmpty()){
-            $Ischeck =  true;
-        }
-        return[$counter, $Ischeck];
+        if (\Auth::check()) {
+            // ユーザーはログインしている
+            $check = Like::where('user_id', \Auth::user()->id)->where('post_id', $id)->get();
+            $Ischeck = false;
+            if(!$check->isEmpty()){
+                $Ischeck =  true;
+            }
+            return[$counter, $Ischeck];
+       }
+       return [$counter, false];
         
     }
 
-    public function like(Request $request, $id)
+    public function like($id)
     {
         $like = new Like();
         $like->post_id = $id;
-        $like->user_id = $request->userId;
+        $like->user_id = \Auth::user()->id;
         $like->save();
         $counter = count($like->where('post_id', $id)->get());
         return $counter;
@@ -40,4 +42,5 @@ class LikeController extends Controller
         $counter = count($like->where('post_id', $id)->get());
         return $counter;
     }
+
 }

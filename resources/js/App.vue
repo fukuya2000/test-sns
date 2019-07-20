@@ -11,12 +11,10 @@
 </template>
 <script>
 import Nav from './components/Nav.vue'
-import Footer from './components/Footer.vue'
 import { INTERNAL_SERVER_ERROR } from './util'
 export default {
   components: {
     Nav,
-    Footer
   },
   computed: {
     errorCode() {

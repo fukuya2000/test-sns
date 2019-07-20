@@ -46,11 +46,9 @@ export default {
   async getComment(id) {
      this.commentForm.post_id = id
      this.commentForm.user_id = this.$store.getters['auth/user_id']
-     const res = await axios.post('/api/comments', this.commentForm)
+     await this.$store.dispatch('post/create', this.commentForm)
      this.$emit('child_del')
-     this.$emit('getComment', res)
      this.commentForm.content = ''
-     this.commentForm.post_id = ''
    }
   }
 }

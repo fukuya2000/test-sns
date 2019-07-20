@@ -37,7 +37,7 @@ export default {
     },
     async del() {
       alert("削除してもよろしいですか？");
-      await axios.delete('/api/posts/' + this.id)
+      await this.$store.dispatch('post/post_del', this.id)
       this.$router.push('/')
     }
   }

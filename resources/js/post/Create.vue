@@ -7,7 +7,7 @@
     <div v-else>
        <form action="" class="form" @submit.prevent="create">
          <ul v-if="createErr">
-           <li v-for="msg in createErr" :key="msg">{{ msg }}</li>
+           <li v-for="(msg, index) in createErr" :key="index">{{ msg }}</li>
          </ul>
         <input type="text" v-model="postForm.title" placeholder="Title">
         <textarea type="text" v-model="postForm.body" placeholder="Body" class="textarea"></textarea>
@@ -18,14 +18,18 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
 export default {
   computed: {
       isLogin (){
         return this.$store.getters['auth/check']
       },
       createErr(){
-      return this.$store.state.create.createErrorMessage
-    }
+      return this.$store.state.post.createErrorMessage
+     },
+      ...mapState({
+            status: state => state.post.status
+        })
   },
   data() {
     return {
@@ -34,18 +38,18 @@ export default {
         body: '',
         user_id: '',
       },
-      err: {
-
-      }
     }
   },
   methods: {
    async create() {
      this.postForm.user_id = this.$store.getters['auth/user_id']
-     await this.$store.dispatch('create/create', this.postForm)
-    }, 
-    crearError() {
-      this.$store.commit('create/setCreateErrorMessage', null)
+     await this.$store.dispatch('post/post_create', this.postForm)
+     if(this.status){
+        this.$router.push('/')
+     }
+    },
+     crearError() {
+      this.$store.commit('post/setCreateErrorMessage', null)
     }
   },
   created() {

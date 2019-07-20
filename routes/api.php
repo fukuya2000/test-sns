@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Symfony\Component\Routing\Router;
+use App\Http\Controllers\PostController;
 
 // 会員登録
 Route::post('/register', 'Auth\RegisterController@register')->name('register');
@@ -30,3 +31,16 @@ Route::get('/likes/{id}', 'LikeController@index');
 Route::put('/likes/{id}', 'LikeController@like');
 Route::delete('/likes/{id}', 'LikeController@destroy');
 
+//Follow
+Route::get('/follows/{id}', 'PostController@isFollow');
+
+//FollowList
+Route::get('/follow/list', 'FollowController@index');
+Route::put('/follows/{id}', 'FollowController@follow');
+Route::delete('/follows/{id}', 'FollowController@unfollow');
+
+//Trend
+Route::get('/trend/post','PostController@mostLikesPost');
+Route::get('/trend/user','FollowController@popularUser');
+
+Route::get('/home', 'HomeController@index');

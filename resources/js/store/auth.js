@@ -10,7 +10,7 @@ const state = {
 const getters = {
   check: state => !! state.user,
   username: state => state.user ? state.user.name : '',
-  user_id: state => state.user ? state.user.id: ''
+  user_id: state => state.user ? state.user.id : ''
 }
 
 const mutations = {
@@ -34,8 +34,8 @@ const actions = {
     const response = await axios.post('/api/register', data).catch(err => err.response || err)
 
     if(response.status === CREATED){
-      context.commit('setApiStatus', true)
       context.commit('setUser', response.data)
+      context.commit('setApiStatus', true)
       return false
     }
 
@@ -53,8 +53,9 @@ const actions = {
     const response = await axios.post('/api/login', data).catch(err => err.response || err)
 
     if (response.status === OK) {
-      context.commit('setApiStatus', true)
       context.commit('setUser', response.data)
+      context.commit('setApiStatus', true)
+      
       return false
     }
 
@@ -67,7 +68,7 @@ const actions = {
     }
   },
   async logout (context, data) {
-    const response = await axios.post('/api/logout', data)
+    await axios.post('/api/logout', data)
     context.commit('setUser', null)
   },
   async currentUser(context){
