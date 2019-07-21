@@ -9,10 +9,11 @@ import SystemError from './post/errors/System.vue'
 import Post from './post/Post.vue'
 import List from './post/FollowList.vue'
 import Torend from './post/Torend.vue'
-
+import User from './post/User.vue'
 import Test from './components/Footer.vue'
 
 Vue.use(VueRouter)
+
 
 const routes = [
   {
@@ -44,15 +45,22 @@ const routes = [
   },
   {
     path: '/list',
-    component: List
+    component: List,
+    beforeEnter (to, from, next){
+      if(!store.getters['auth/check']){
+        next('/login')
+      }else{
+        next()
+      }
+    }
   },
   {
     path: '/trend',
     component: Torend
   },
   {
-    path: '/test',
-    component: Test
+    path: '/profile/:id',
+    component: User
   }
 ]
 

@@ -40,7 +40,7 @@ class User extends Authenticatable
 
     public function posts()
     {
-        return $this->hasMany('Post');
+        return $this->hasMany('App\Post');
     }
 
     public function followers()
@@ -51,5 +51,10 @@ class User extends Authenticatable
     public function follows()
     {
         return $this->hasMany('App\Follow', 'user_id');
+    }
+
+    public function userSelect()
+    {
+       return select(['id', 'name']);
     }
 }

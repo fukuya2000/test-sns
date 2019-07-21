@@ -1836,6 +1836,12 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       return feachFollow;
     }(),
     isFollow: function isFollow() {
+      if (!this.$store.getters['auth/check']) {
+        alert('ログインしてください');
+        this.$router.push('/login');
+        return;
+      }
+
       if (this.followOrUnfollow === false) {
         this.followOrUnfollow = true;
         this.$store.dispatch('follow/follow', this.userId);
@@ -2079,6 +2085,10 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -2154,6 +2164,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    username: function username(state) {
+      return state.auth.user;
+    }
+  })),
   data: function data() {
     return {
       drawer: null
@@ -2414,9 +2429,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
 /* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
-/* harmony import */ var _Comment_vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./Comment.vue */ "./resources/js/post/Comment.vue");
-/* harmony import */ var _components_Like_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/Like.vue */ "./resources/js/components/Like.vue");
-/* harmony import */ var _components_Follow_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Follow.vue */ "./resources/js/components/Follow.vue");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Comment_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Comment.vue */ "./resources/js/post/Comment.vue");
+/* harmony import */ var _components_Like_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Like.vue */ "./resources/js/components/Like.vue");
+/* harmony import */ var _components_Follow_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Follow.vue */ "./resources/js/components/Follow.vue");
 
 
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -2495,17 +2512,37 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   components: {
-    Comment: _Comment_vue__WEBPACK_IMPORTED_MODULE_2__["default"],
-    Like: _components_Like_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
-    Follow: _components_Follow_vue__WEBPACK_IMPORTED_MODULE_4__["default"]
+    Comment: _Comment_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Like: _components_Like_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Follow: _components_Follow_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
   },
-  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+  computed: _objectSpread({
+    pages: function pages() {
+      var start = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.max([this.current_page - 2, 1]);
+
+      var end = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.min([start + 5, this.last_page + 1]);
+
+      start = lodash__WEBPACK_IMPORTED_MODULE_2___default.a.max([end - 5, 1]);
+      return lodash__WEBPACK_IMPORTED_MODULE_2___default.a.range(start, end);
+    }
+  }, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
     comments: function comments(state) {
       return state.post.comments;
     },
@@ -2513,7 +2550,22 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       return state.follow.followerName;
     },
     getFollowList: function getFollowList(state) {
-      return state.follow.followPost;
+      return state.follow.followPost.data;
+    },
+    current_page: function current_page(state) {
+      return state.follow.followPost.current_page;
+    },
+    last_page: function last_page(state) {
+      return state.follow.followPost.last_page;
+    },
+    total: function total(state) {
+      return state.follow.followPost.total;
+    },
+    from: function from(state) {
+      return state.follow.followPost.from;
+    },
+    to: function to(state) {
+      return state.follow.followPost.to;
     }
   })),
   data: function data() {
@@ -2586,7 +2638,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
       }
 
       return comment_edit;
-    }()
+    }(),
+    getPagination: function getPagination(page) {
+      this.$store.dispatch('follow/index', page);
+    },
+    change: function change(page) {
+      if (page >= 1 && page <= this.last_page) {
+        this.getPagination(page);
+      }
+    }
+  },
+  mounted: function mounted() {
+    this.getPagination(1);
   },
   created: function created() {
     this.fetchPost();
@@ -2773,21 +2836,23 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
       return fetchPost;
     }(),
-    del: function del() {
-      this.dialog = false;
-    },
-    getPostId: function getPostId(id) {
-      this.postId = id;
-
+    authCheck: function authCheck() {
       if (!this.$store.getters['auth/check']) {
         alert('ログインしてください');
         this.$router.push('/login');
       }
     },
+    del: function del() {
+      this.dialog = false;
+    },
+    getPostId: function getPostId(id) {
+      this.postId = id;
+      this.authCheck();
+    },
     comment_edit: function () {
       var _comment_edit = _asyncToGenerator(
       /*#__PURE__*/
-      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(commentId, userId) {
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee2(commentId) {
         var id;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee2$(_context2) {
           while (1) {
@@ -2805,7 +2870,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
         }, _callee2, this);
       }));
 
-      function comment_edit(_x, _x2) {
+      function comment_edit(_x) {
         return _comment_edit.apply(this, arguments);
       }
 
@@ -3075,7 +3140,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
             switch (_context2.prev = _context2.next) {
               case 0:
                 _context2.next = 2;
-                return axios.post('/api/posts/' + this.id, this.postFrom);
+                return axios.put('/api/posts/' + this.id, this.postFrom);
 
               case 2:
                 this.$router.push('/');
@@ -3252,6 +3317,172 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   },
   created: function created() {
     this.feachPost();
+  }
+});
+
+/***/ }),
+
+/***/ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/post/User.vue?vue&type=script&lang=js&":
+/*!*********************************************************************************************************************************************************!*\
+  !*** ./node_modules/babel-loader/lib??ref--4-0!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/post/User.vue?vue&type=script&lang=js& ***!
+  \*********************************************************************************************************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js");
+/* harmony import */ var _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! lodash */ "./node_modules/lodash/lodash.js");
+/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _Comment_vue__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./Comment.vue */ "./resources/js/post/Comment.vue");
+/* harmony import */ var _components_Like_vue__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/Like.vue */ "./resources/js/components/Like.vue");
+/* harmony import */ var _components_Follow_vue__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/Follow.vue */ "./resources/js/components/Follow.vue");
+
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; var ownKeys = Object.keys(source); if (typeof Object.getOwnPropertySymbols === 'function') { ownKeys = ownKeys.concat(Object.getOwnPropertySymbols(source).filter(function (sym) { return Object.getOwnPropertyDescriptor(source, sym).enumerable; })); } ownKeys.forEach(function (key) { _defineProperty(target, key, source[key]); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+
+
+
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+  components: {
+    Comment: _Comment_vue__WEBPACK_IMPORTED_MODULE_3__["default"],
+    Like: _components_Like_vue__WEBPACK_IMPORTED_MODULE_4__["default"],
+    Follow: _components_Follow_vue__WEBPACK_IMPORTED_MODULE_5__["default"]
+  },
+  data: function data() {
+    return {
+      dialog: false,
+      userId: this.$store.getters['auth/user_id'],
+      postId: '',
+      commentEdit: false
+    };
+  },
+  computed: _objectSpread({}, Object(vuex__WEBPACK_IMPORTED_MODULE_1__["mapState"])({
+    getProfile: function getProfile(state) {
+      return state.follow.profile;
+    },
+    getProfilePosts: function getProfilePosts(state) {
+      return state.follow.profilePosts;
+    }
+  })),
+  methods: {
+    fetchFollow: function () {
+      var _fetchFollow = _asyncToGenerator(
+      /*#__PURE__*/
+      _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
+        var id;
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                id = this.$route.params.id;
+                _context.next = 3;
+                return this.$store.dispatch('follow/profileIndex', id);
+
+              case 3:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee, this);
+      }));
+
+      function fetchFollow() {
+        return _fetchFollow.apply(this, arguments);
+      }
+
+      return fetchFollow;
+    }(),
+    authCheck: function authCheck() {
+      if (!this.$store.getters['auth/check']) {
+        alert('ログインしてください');
+        this.$router.push('/login');
+      }
+    },
+    del: function del() {
+      this.dialog = false;
+    },
+    getPostId: function getPostId(id) {
+      this.postId = id;
+      this.authCheck();
+    }
+  },
+  created: function created() {
+    this.fetchFollow();
   }
 });
 
@@ -22639,9 +22870,7 @@ var render = function() {
           _c("v-spacer"),
           _vm._v(" "),
           this.$store.getters["auth/check"]
-            ? _c("v-toolbar-title", [
-                _vm._v(_vm._s(this.$store.getters["auth/username"]))
-              ])
+            ? _c("v-toolbar-title", [_vm._v(_vm._s(_vm.username.name))])
             : _c(
                 "v-toolbar-title",
                 [
@@ -23117,6 +23346,77 @@ var render = function() {
           })
         ],
         1
+      ),
+      _vm._v(" "),
+      _c(
+        "ul",
+        { staticClass: "pagination" },
+        [
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.change(1)
+                }
+              }
+            },
+            [_vm._v("«")]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.change(_vm.current_page - 1)
+                }
+              }
+            },
+            [_vm._v("<")]
+          ),
+          _vm._v(" "),
+          _vm._l(_vm.pages, function(page) {
+            return _c(
+              "li",
+              {
+                key: page,
+                class: { current_page: page === _vm.current_page },
+                on: {
+                  click: function($event) {
+                    return _vm.change(page)
+                  }
+                }
+              },
+              [_vm._v("\n           " + _vm._s(page) + "\n        ")]
+            )
+          }),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.change(_vm.current_page + 1)
+                }
+              }
+            },
+            [_vm._v(">")]
+          ),
+          _vm._v(" "),
+          _c(
+            "li",
+            {
+              on: {
+                click: function($event) {
+                  return _vm.change(_vm.last_page)
+                }
+              }
+            },
+            [_vm._v("»")]
+          )
+        ],
+        2
       )
     ],
     2
@@ -23160,6 +23460,7 @@ var render = function() {
                 return [
                   _c(
                     "p",
+                    { on: { click: _vm.authCheck } },
                     [
                       _c("router-link", { attrs: { to: "/list" } }, [
                         _vm._v("---->フォローした人だけ観る")
@@ -23209,7 +23510,14 @@ var render = function() {
                             _c(
                               "v-card-title",
                               { staticClass: "py-1 post_name" },
-                              [_vm._v(_vm._s(post.user.name))]
+                              [
+                                _c(
+                                  "router-link",
+                                  { attrs: { to: "/profile/" + post.user_id } },
+                                  [_vm._v(_vm._s(post.user.name))]
+                                )
+                              ],
+                              1
                             ),
                             _vm._v(" "),
                             _c("v-card-text", { staticClass: "py-2" }, [
@@ -23263,70 +23571,92 @@ var render = function() {
                                     _c(
                                       "div",
                                       { staticClass: "box_item" },
-                                      [
-                                        _c("p", [_vm._v("UserName")]),
-                                        _vm._v(" "),
-                                        _vm._l(_vm.comments, function(
-                                          comment,
-                                          key
-                                        ) {
-                                          return _c("ul", { key: key }, [
-                                            post.id === comment.post_id
-                                              ? _c("span", [
-                                                  _c(
-                                                    "li",
-                                                    { staticClass: "parent" },
-                                                    [
-                                                      _vm._v(
-                                                        "\n                " +
+                                      _vm._l(_vm.comments, function(
+                                        comment,
+                                        key
+                                      ) {
+                                        return _c("div", { key: key }, [
+                                          post.id === comment.post_id
+                                            ? _c("span", [
+                                                _c(
+                                                  "div",
+                                                  {
+                                                    staticClass:
+                                                      "parent comments"
+                                                  },
+                                                  [
+                                                    _c(
+                                                      "p",
+                                                      {
+                                                        staticClass:
+                                                          "comment_name"
+                                                      },
+                                                      [
+                                                        _vm._v(
+                                                          _vm._s(
+                                                            comment.user.name
+                                                          )
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "p",
+                                                      {
+                                                        staticClass:
+                                                          "comment_content"
+                                                      },
+                                                      [
+                                                        _vm._v(
                                                           _vm._s(
                                                             comment.comments
-                                                          ) +
-                                                          "\n                "
-                                                      ),
-                                                      _c(
-                                                        "span",
-                                                        {
-                                                          directives: [
-                                                            {
-                                                              name: "show",
-                                                              rawName: "v-show",
-                                                              value:
-                                                                _vm.userId ===
-                                                                comment.user_id,
-                                                              expression:
-                                                                "userId === comment.user_id"
-                                                            }
-                                                          ]
-                                                        },
-                                                        [
-                                                          _c(
-                                                            "span",
-                                                            {
-                                                              staticClass:
-                                                                "comment_edit",
-                                                              on: {
-                                                                click: function(
-                                                                  $event
-                                                                ) {
-                                                                  return _vm.comment_edit(
-                                                                    comment.id
-                                                                  )
-                                                                }
-                                                              }
-                                                            },
-                                                            [_vm._v("×")]
                                                           )
+                                                        )
+                                                      ]
+                                                    ),
+                                                    _vm._v(" "),
+                                                    _c(
+                                                      "span",
+                                                      {
+                                                        directives: [
+                                                          {
+                                                            name: "show",
+                                                            rawName: "v-show",
+                                                            value:
+                                                              _vm.userId ===
+                                                              comment.user_id,
+                                                            expression:
+                                                              "userId === comment.user_id"
+                                                          }
                                                         ]
-                                                      )
-                                                    ]
-                                                  )
-                                                ])
-                                              : _vm._e()
-                                          ])
-                                        })
-                                      ],
-                                      2
+                                                      },
+                                                      [
+                                                        _c(
+                                                          "span",
+                                                          {
+                                                            staticClass:
+                                                              "comment_edit",
+                                                            on: {
+                                                              click: function(
+                                                                $event
+                                                              ) {
+                                                                return _vm.comment_edit(
+                                                                  comment.id
+                                                                )
+                                                              }
+                                                            }
+                                                          },
+                                                          [_vm._v("×")]
+                                                        )
+                                                      ]
+                                                    )
+                                                  ]
+                                                )
+                                              ])
+                                            : _vm._e()
+                                        ])
+                                      }),
+                                      0
                                     )
                                   ]
                                 )
@@ -24067,6 +24397,185 @@ var render = function() {
             }
           },
           [_vm._v(" "), _c("comment", { on: { child_del: _vm.del } })],
+          1
+        )
+      ],
+      1
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+
+
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/post/User.vue?vue&type=template&id=3d16d328&":
+/*!*************************************************************************************************************************************************************************************************!*\
+  !*** ./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/vue-loader/lib??vue-loader-options!./resources/js/post/User.vue?vue&type=template&id=3d16d328& ***!
+  \*************************************************************************************************************************************************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "render", function() { return render; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return staticRenderFns; });
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c(
+      "div",
+      _vm._l(_vm.getProfile, function(profile, i) {
+        return _c("ul", { key: i, staticClass: "profile" }, [
+          _c("p", [_vm._v(_vm._s(profile.name))]),
+          _vm._v(" "),
+          _c("p", [
+            _vm._v(_vm._s(profile.follows_count)),
+            _c("span", { staticClass: "fc_gray" }, [_vm._v("フォロー中")]),
+            _vm._v(_vm._s(profile.followers_count)),
+            _c("span", { staticClass: "fc_gray" }, [_vm._v("フォロワー")])
+          ])
+        ])
+      }),
+      0
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      { staticClass: "custom_app" },
+      [
+        _c(
+          "v-dialog",
+          {
+            attrs: { width: "500" },
+            scopedSlots: _vm._u([
+              {
+                key: "activator",
+                fn: function(ref) {
+                  var on = ref.on
+                  return _vm._l(_vm.getProfilePosts, function(post, key) {
+                    return _c(
+                      "v-layout",
+                      {
+                        key: key,
+                        staticClass: "card-wrap",
+                        attrs: { "justify-center": "" }
+                      },
+                      [
+                        _c(
+                          "v-card",
+                          { staticClass: "custom_card parent" },
+                          [
+                            _vm.userId === post.user_id
+                              ? _c("div", [
+                                  _c(
+                                    "span",
+                                    { staticClass: "edit" },
+                                    [
+                                      _c(
+                                        "router-link",
+                                        { attrs: { to: "/posts/" + post.id } },
+                                        [_vm._v("Edit")]
+                                      )
+                                    ],
+                                    1
+                                  )
+                                ])
+                              : _c(
+                                  "div",
+                                  [
+                                    _c("Follow", {
+                                      attrs: { userId: post.user_id }
+                                    })
+                                  ],
+                                  1
+                                ),
+                            _vm._v(" "),
+                            _c("v-card-text", { staticClass: "py-2" }, [
+                              _c("p", [_vm._v(_vm._s(post.title))]),
+                              _vm._v(" "),
+                              _c("p", [_vm._v(_vm._s(post.body))])
+                            ]),
+                            _vm._v(" "),
+                            _c(
+                              "v-btn",
+                              _vm._g(
+                                {
+                                  attrs: { color: "red lighten-2", dark: "" },
+                                  on: {
+                                    click: function($event) {
+                                      return _vm.getPostId(post.id)
+                                    }
+                                  }
+                                },
+                                on
+                              ),
+                              [_vm._v("\n          Comment\n        ")]
+                            ),
+                            _vm._v(" "),
+                            _c("Like", { attrs: { postId: post.id } }),
+                            _vm._v(" "),
+                            _c(
+                              "v-expansion-panel",
+                              [
+                                _c(
+                                  "v-expansion-panel-content",
+                                  {
+                                    scopedSlots: _vm._u(
+                                      [
+                                        {
+                                          key: "header",
+                                          fn: function() {
+                                            return [
+                                              _c("div", [_vm._v("コメント")])
+                                            ]
+                                          },
+                                          proxy: true
+                                        }
+                                      ],
+                                      null,
+                                      true
+                                    )
+                                  },
+                                  [
+                                    _vm._v(" "),
+                                    _c("div", { staticClass: "box_item" }, [
+                                      _c("p", [_vm._v("UserName")])
+                                    ])
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ],
+                          1
+                        )
+                      ],
+                      1
+                    )
+                  })
+                }
+              }
+            ]),
+            model: {
+              value: _vm.dialog,
+              callback: function($$v) {
+                _vm.dialog = $$v
+              },
+              expression: "dialog"
+            }
+          },
+          [
+            _vm._v(" "),
+            _c("comment", {
+              attrs: { postId: _vm.postId },
+              on: { child_del: _vm.del }
+            })
+          ],
           1
         )
       ],
@@ -67243,6 +67752,75 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./resources/js/post/User.vue":
+/*!************************************!*\
+  !*** ./resources/js/post/User.vue ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./User.vue?vue&type=template&id=3d16d328& */ "./resources/js/post/User.vue?vue&type=template&id=3d16d328&");
+/* harmony import */ var _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./User.vue?vue&type=script&lang=js& */ "./resources/js/post/User.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport *//* harmony import */ var _node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../node_modules/vue-loader/lib/runtime/componentNormalizer.js */ "./node_modules/vue-loader/lib/runtime/componentNormalizer.js");
+
+
+
+
+
+/* normalize component */
+
+var component = Object(_node_modules_vue_loader_lib_runtime_componentNormalizer_js__WEBPACK_IMPORTED_MODULE_2__["default"])(
+  _User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_1__["default"],
+  _User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__["render"],
+  _User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"],
+  false,
+  null,
+  null,
+  null
+  
+)
+
+/* hot reload */
+if (false) { var api; }
+component.options.__file = "resources/js/post/User.vue"
+/* harmony default export */ __webpack_exports__["default"] = (component.exports);
+
+/***/ }),
+
+/***/ "./resources/js/post/User.vue?vue&type=script&lang=js&":
+/*!*************************************************************!*\
+  !*** ./resources/js/post/User.vue?vue&type=script&lang=js& ***!
+  \*************************************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/babel-loader/lib??ref--4-0!../../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=script&lang=js& */ "./node_modules/babel-loader/lib/index.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/post/User.vue?vue&type=script&lang=js&");
+/* empty/unused harmony star reexport */ /* harmony default export */ __webpack_exports__["default"] = (_node_modules_babel_loader_lib_index_js_ref_4_0_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_script_lang_js___WEBPACK_IMPORTED_MODULE_0__["default"]); 
+
+/***/ }),
+
+/***/ "./resources/js/post/User.vue?vue&type=template&id=3d16d328&":
+/*!*******************************************************************!*\
+  !*** ./resources/js/post/User.vue?vue&type=template&id=3d16d328& ***!
+  \*******************************************************************/
+/*! exports provided: render, staticRenderFns */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! -!../../../node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!../../../node_modules/vue-loader/lib??vue-loader-options!./User.vue?vue&type=template&id=3d16d328& */ "./node_modules/vue-loader/lib/loaders/templateLoader.js?!./node_modules/vue-loader/lib/index.js?!./resources/js/post/User.vue?vue&type=template&id=3d16d328&");
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "render", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__["render"]; });
+
+/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, "staticRenderFns", function() { return _node_modules_vue_loader_lib_loaders_templateLoader_js_vue_loader_options_node_modules_vue_loader_lib_index_js_vue_loader_options_User_vue_vue_type_template_id_3d16d328___WEBPACK_IMPORTED_MODULE_0__["staticRenderFns"]; });
+
+
+
+/***/ }),
+
 /***/ "./resources/js/post/errors/System.vue":
 /*!*********************************************!*\
   !*** ./resources/js/post/errors/System.vue ***!
@@ -67316,7 +67894,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _post_Post_vue__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./post/Post.vue */ "./resources/js/post/Post.vue");
 /* harmony import */ var _post_FollowList_vue__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./post/FollowList.vue */ "./resources/js/post/FollowList.vue");
 /* harmony import */ var _post_Torend_vue__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./post/Torend.vue */ "./resources/js/post/Torend.vue");
-/* harmony import */ var _components_Footer_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/Footer.vue */ "./resources/js/components/Footer.vue");
+/* harmony import */ var _post_User_vue__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./post/User.vue */ "./resources/js/post/User.vue");
+/* harmony import */ var _components_Footer_vue__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/Footer.vue */ "./resources/js/components/Footer.vue");
+
 
 
 
@@ -67353,13 +67933,20 @@ var routes = [{
   component: _post_Post_vue__WEBPACK_IMPORTED_MODULE_7__["default"]
 }, {
   path: '/list',
-  component: _post_FollowList_vue__WEBPACK_IMPORTED_MODULE_8__["default"]
+  component: _post_FollowList_vue__WEBPACK_IMPORTED_MODULE_8__["default"],
+  beforeEnter: function beforeEnter(to, from, next) {
+    if (!_store__WEBPACK_IMPORTED_MODULE_2__["default"].getters['auth/check']) {
+      next('/login');
+    } else {
+      next();
+    }
+  }
 }, {
   path: '/trend',
   component: _post_Torend_vue__WEBPACK_IMPORTED_MODULE_9__["default"]
 }, {
-  path: '/test',
-  component: _components_Footer_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
+  path: '/profile/:id',
+  component: _post_User_vue__WEBPACK_IMPORTED_MODULE_10__["default"]
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_1__["default"]({
   mode: 'history',
@@ -67629,10 +68216,12 @@ var mutations = {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 var state = {
-  followPost: null,
+  followPost: [],
   followerName: null,
   orFollow: null,
-  popularUsers: null
+  popularUsers: null,
+  profile: null,
+  profilePosts: []
 };
 var mutations = {
   setFollowList: function setFollowList(state, data) {
@@ -67644,11 +68233,15 @@ var mutations = {
   },
   setPopularUsers: function setPopularUsers(state, res) {
     state.popularUsers = res.data;
+  },
+  setProfile: function setProfile(state, data) {
+    state.profile = data[0];
+    state.profilePosts = data[1];
   }
 };
 var actions = {
-  index: function index(context) {
-    axios.get('/api/follow/list').then(function (res) {
+  index: function index(context, page) {
+    axios.get('/api/follows?page=' + page).then(function (res) {
       return context.commit('setFollowList', res.data);
     });
   },
@@ -67665,6 +68258,11 @@ var actions = {
   popular_users: function popular_users(context) {
     axios.get('/api/trend/user').then(function (res) {
       return context.commit('setPopularUsers', res.data);
+    });
+  },
+  profileIndex: function profileIndex(context, id) {
+    axios.get('/api/profile/' + id).then(function (res) {
+      return context.commit('setProfile', res.data);
     });
   }
 };
@@ -67733,7 +68331,6 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
 var state = {
   posts: [],
-  pagination: [],
   comments: null,
   createErrorMessage: null,
   status: null,
@@ -67742,9 +68339,6 @@ var state = {
 var getters = {
   getPost: function getPost(state) {
     return state.posts;
-  },
-  getPagination: function getPagination(state) {
-    return state.pagination;
   }
 };
 var mutations = {
@@ -67816,6 +68410,7 @@ var actions = {
                 context.commit('setCreateErrorMessage', res.data.errors);
               } else {
                 context.commit('setStatus', true);
+                context.commit('setPosts', res.data);
               }
 
             case 4:
@@ -67836,6 +68431,7 @@ var actions = {
     var _post_del = _asyncToGenerator(
     /*#__PURE__*/
     _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee3(context, id) {
+      var res;
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee3$(_context3) {
         while (1) {
           switch (_context3.prev = _context3.next) {
@@ -67844,6 +68440,10 @@ var actions = {
               return axios["delete"]('/api/posts/' + id);
 
             case 2:
+              res = _context3.sent;
+              context.commit('setPosts', res.data);
+
+            case 4:
             case "end":
               return _context3.stop();
           }

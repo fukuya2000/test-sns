@@ -1,7 +1,6 @@
 import {  UNPROCESSABLE_ENTITY } from '../util'
 const state = {
   posts: [],
-  pagination: [],
   comments: null,
   createErrorMessage: null,
   status: null,
@@ -12,9 +11,6 @@ const getters = {
   getPost(state) {
     return state.posts
   },
-  getPagination(state){
-    return state.pagination
-  }
 }
 
 const mutations = {
@@ -33,10 +29,7 @@ const mutations = {
   setPopularPost(state, res){
     state.popularPosts = res.data
   }
-
 }
-
-
 
 const actions = {
   async index(context, page) {
@@ -44,18 +37,20 @@ const actions = {
    axios.get('/api/comments').then(res => context.commit('setComments', res.data))
   },
   async post_create(context, data) {
-     const res = await axios.post('/api/posts', data).catch(err => err.response || err)
+     const res = await axios.post('/api/posts' , data).catch(err => err.response || err)
  
      if(res.status === UNPROCESSABLE_ENTITY){
        context.commit('setStatus', false)
        context.commit('setCreateErrorMessage', res.data.errors)
      } else {
        context.commit('setStatus', true)
+       context.commit('setPosts', res.data)
      }
 
    },
   async post_del(context, id) {
-     await axios.delete('/api/posts/' + id)
+   const res = await axios.delete('/api/posts/' + id)
+    context.commit('setPosts', res.data)
    },
 
    popular_posts(context){

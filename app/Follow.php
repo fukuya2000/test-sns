@@ -19,7 +19,7 @@ class Follow extends Model
             //Follower一覧取得
             $list = User::whereIn('id', $followlist)->get();
             //Follwerの投稿を取得
-            $post = Post::whereIn('user_id', $followlist)->with('user:id,name')->orderBy('id', 'desc')->get();
+            $post = Post::whereIn('user_id', $followlist)->with('user:id,name')->orderBy('id', 'desc')->paginate(3);
             return [$post, $list];
         }
     }

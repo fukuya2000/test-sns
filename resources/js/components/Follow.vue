@@ -21,6 +21,11 @@ export default {
       this.followOrUnfollow = res.data[0]
       },
     isFollow() {
+        if(!this.$store.getters['auth/check']){
+         alert('ログインしてください')
+         this.$router.push('/login')
+         return
+        }
         if(this.followOrUnfollow === false){
           this.followOrUnfollow = true
           this.$store.dispatch('follow/follow', this.userId)

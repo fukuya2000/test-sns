@@ -62,7 +62,7 @@
     <v-toolbar color="cyan" dark fixed app height="70px" extension-height="70px" class="custom-toolbar">
       <v-toolbar-title><router-link to="/">SNS</router-link></v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-toolbar-title v-if="this.$store.getters['auth/check']">{{  this.$store.getters['auth/username'] }}</v-toolbar-title>
+      <v-toolbar-title v-if="this.$store.getters['auth/check']">{{  username.name }}</v-toolbar-title>
       <v-toolbar-title v-else>
         <router-link to="/login" class="white_link">Login/Register</router-link>
       </v-toolbar-title>
@@ -75,7 +75,11 @@
   import { mapState ,mapGetters} from 'vuex'
 
   export default {
-    
+    computed: {
+      ...mapState({ 
+        username: state => state.auth.user,
+      })
+    },
     data: () => ({
       drawer: null,
       
@@ -89,7 +93,7 @@
        this.check = false
        this.username = ''
        this.$router.push('/login')
-      }
+      },
     }
   }
 </script>

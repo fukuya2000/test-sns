@@ -22,7 +22,6 @@ Vue.use(Vuetify, {
 // Main app
 const createApp = async () => {
   await store.dispatch('auth/currentUser')
-
   new Vue({
     el: '#app',
     router,
@@ -30,7 +29,11 @@ const createApp = async () => {
     components: { App }, 
     template: '<App />' 
 });
-} 
-
+}
 createApp()
+
+
+
+
+
 

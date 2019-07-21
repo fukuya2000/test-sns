@@ -31,7 +31,7 @@ export default {
       this.postFrom.body = post.body
     },
     async updata(){
-      await axios.post('/api/posts/' + this.id, this.postFrom)
+      await axios.put('/api/posts/' + this.id, this.postFrom)
       this.$router.push('/')
 
     },

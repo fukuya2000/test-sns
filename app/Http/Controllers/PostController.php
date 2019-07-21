@@ -11,11 +11,11 @@ class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::with('comments', 'user:id,name')->orderBy('id', 'desc')->paginate(3);
+        $posts = Post::with('comments', 'user:id,name')->orderBy('id', 'desc')->paginate(4);
         return $posts;  
     }
 
-    public function create(CreateFolder $request)
+    public function store(CreateFolder $request)
     {
         $post = new Post();
         $post->title = $request->title;
@@ -23,17 +23,16 @@ class PostController extends Controller
         $post->user_id = $request->user_id;
         $post->save();
         $posts = Post::all();
-        //$posts = Post::with('comments')->get();
         return $posts;
     }
 
-    public function edit($id)
+    public function show($id)
     {
         $post = Post::find($id);
         return $post;
     }
 
-    public function updata(Request $request, $id) 
+    public function update(Request $request, $id) 
     {
         $post = Post::find($id);
         $post->title = $request->title;
@@ -47,6 +46,7 @@ class PostController extends Controller
         $post->likes()->delete();
         $post->comments()->delete();
         $post->delete();
+        return Post::all();
     }
 
     public function isFollow($id)

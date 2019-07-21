@@ -9,7 +9,9 @@ class CommentController extends Controller
 {
     public function index()
     {
-        return Comment::all();
+        //$comments = Comment::with('user:id,name')->orderBy('id', 'desc')->get();
+        $comment = new Comment();
+        return $comment->getComments();
     }
     
     public function create(Request $request)
@@ -19,13 +21,14 @@ class CommentController extends Controller
         $comments->post_id = $request->post_id;
         $comments->user_id = $request->user_id;
         $comments->save();
-        return Comment::all();
+        return $comments->getComments();
     }
 
     public function destroy($id)
     {
+       $comments = new Comment();
        $comment = Comment::find($id);
        $comment->delete();
-       return Comment::all();
+       return $comments->getComments();
     }
 }

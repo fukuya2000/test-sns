@@ -1,9 +1,11 @@
 
 const state = {
-  followPost: null,
+  followPost: [],
   followerName: null,
   orFollow: null,
-  popularUsers: null
+  popularUsers: null,
+  profile: null,
+  profilePosts: []
 }
 
 const mutations = {
@@ -16,12 +18,16 @@ const mutations = {
   },
   setPopularUsers(state, res) {
     state.popularUsers = res.data
+  },
+  setProfile(state, data) {
+    state.profile = data[0]
+    state.profilePosts = data[1]
   }
 }
 
 const actions = {
-  index(context){
-    axios.get('/api/follow/list').then(res => context.commit('setFollowList', res.data))
+  index(context, page){
+    axios.get('/api/follows?page=' + page).then(res => context.commit('setFollowList', res.data))
   },
   follow(context, id) {
     axios.put('/api/follows/' + id).then(res => context.commit('setFollowList',  res.data))
@@ -31,6 +37,9 @@ const actions = {
    },
    popular_users(context){
     axios.get('/api/trend/user').then(res => context.commit('setPopularUsers', res.data))
+   },
+   profileIndex(context, id) {
+    axios.get('/api/profile/' + id).then(res => context.commit('setProfile', res.data))
    }
 }
 export default {

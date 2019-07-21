@@ -1,9 +1,14 @@
 .dlle{
   cursor: pointer;
 }
-.custom_app,
+main,
 .contents {
-  padding: 100px 10px 30px 10px;
+  padding: 100px 0px 30px 0px;
+  width: 400px;
+  margin: 0 auto;
+}
+.contents{
+  padding: 30px 10px;
   width: 400px;
   margin: 0 auto;
 }
@@ -61,6 +66,7 @@ a{
 }
 .card-wrap{
   width: 400px;
+  padding: 0 10px;
 }
 .custom_card_title{
   text-align: center;
@@ -92,7 +98,7 @@ form{
 .edit a{
   color: #11a4e9
 }
-
+/*comment */
 .box_item{
   box-shadow: 0 0 8px #7e7e7e;
   margin: 10px 20px;
@@ -103,14 +109,26 @@ form{
   list-style: none;
   font-size: 16px;
 }
+.comments{
+  padding: 20px 10px;
+  border-bottom: 1px dotted #7e7e7e;
+}
+
 .comment_edit{
   position: absolute;
   right: 0;
-  top:0;
+  top:3px;
   font-size: 16px;
   font-weight: 600;
   color: #7e7e7e;
   cursor: pointer;
+}
+.comment_name{
+  font-size: 12px;
+  font-weight: 600;
+  position: absolute;
+  top: 1px;
+  left: 0;
 }
 
 .like{
@@ -268,4 +286,14 @@ ul .current_page{
   background: #1cb7ff;
   color: white;
 
+}
+
+/*-----------------------------
+Profile
+---------------------------*/
+.profile{
+  box-shadow: 0 0 8px #7e7e7e;
+  padding: 10px;
+  margin: 20px;
+  font-weight: 600;
 }
