@@ -1,26 +1,9 @@
 ShareTopic
 ====
 
-Overview
+自分の思ったことをシェアできるSNS
 
-## Description
 
-## Demo
+## 概要
 
-## VS. 
 
-## Requirement
-
-## Usage
-
-## Install
-
-## Contribution
-
-## Licence
-
-[MIT](https://github.com/tcnksm/tool/blob/master/LICENCE)
-
-## Author
-
-[tcnksm](https://github.com/tcnksm)
